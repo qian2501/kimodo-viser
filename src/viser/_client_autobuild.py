@@ -124,7 +124,7 @@ def _build_viser_client(out_dir: Path, cached: bool = True) -> None:
         return
 
     node_bin_dir = _install_sandboxed_node()
-    npx_path = node_bin_dir / "npx"
+    npx_path = node_bin_dir / ("npx.cmd" if sys.platform == "win32" else "npx")
 
     subprocess_env = os.environ.copy()
     subprocess_env["NODE_VIRTUAL_ENV"] = str(node_bin_dir.parent)
@@ -133,7 +133,7 @@ def _build_viser_client(out_dir: Path, cached: bool = True) -> None:
         + (";" if sys.platform == "win32" else ":")
         + subprocess_env["PATH"]
     )
-    npm_path = node_bin_dir / "npm"
+    npm_path = node_bin_dir / ("npm.cmd" if sys.platform == "win32" else "npm")
     subprocess.run(
         args=[str(npm_path), "install", "--legacy-peer-deps"],
         env=subprocess_env,
